@@ -1,0 +1,35 @@
+.main-container{
+    display: flex;
+    flex-wrap: wrap;
+    width:100%;
+}
+.top-block{
+    border: 1px solid green;
+    width: 100%;
+    min-height: 200px;
+    box-sizing: border-box;
+}
+.left-block{
+    border: 1px solid blue;
+    width: 20%;
+    min-height: 300px;
+    box-sizing: border-box;
+}
+.main-block{
+    border: 1px solid red;
+    width: 60%;
+    box-sizing: border-box;
+    min-height: 400px;
+}
+.right-block{
+    border: 1px solid blue;
+    width: 20%;
+    min-height: 300px;
+    box-sizing: border-box;
+}
+.footer-block{
+    border: 1px solid green;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 200px;
+}
