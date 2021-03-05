@@ -3,6 +3,7 @@
 $_title = "Template PHP";
 $_h1 = "Lorem, ipsum dolor.";
 $_date = date('d M Y:i:s');
+$date = date('Y');
 
 ?>
 <!DOCTYPE html>
@@ -37,6 +38,7 @@ $_date = date('d M Y:i:s');
         </div>
         <footer class="footer-block">
             <h1>Footer block</h1>
+            <?php echo "<h2>&#169; " . $date . "</h2>"; ?>
         </footer>
     </div>
 

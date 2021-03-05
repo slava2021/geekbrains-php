@@ -125,9 +125,33 @@ ini_set('display_startup_errors', '1');
     //  В зависимости от переданного значения операции выполнить одну
     //  из арифметических операций (использовать функции из пункта 3)
     //  и вернуть полученное значение (использовать switch).
+    $operation = ["+", "-", "*", "/"];
+    $arg1 = rand(0, 10); // Переопределяем переменные a и b заново
+    $arg2 = rand(0, 10);
+    $rnd = rand(0, (count($operation) - 1));
 
+    $operation = $operation[$rnd];
+    echo '<br>$arg1 = ' . $arg1 . ' | $arg2 = ' . $arg2 . " | operation = " . $operation;
+    function mathOperation($arg1, $arg2, $operation)
+    {
+        switch ($operation) {
+            case '+':
+                $sum = sum($arg1, $arg2);
+                break;
+            case '-':
+                $sum = sub($arg1, $arg2);
+                break;
+            case '*':
+                $sum = mult($arg1, $arg2);
+                break;
+            case '/':
+                $sum = div($arg1, $arg2);
+                break;
+        }
+        return $sum;
+    }
+    echo "<br>sum = " . mathOperation($arg1, $arg2, $operation);
     ?>
-
 
 </body>
 
