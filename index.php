@@ -56,11 +56,11 @@ ini_set('display_startup_errors', '1');
     $b = rand(-10, 10);
     echo "a = " . $a . " | b = " . $b;
     if ($a >= 0 && $b >= 0) {
-        echo "<br>a - b = " . $sum = $a - $b;
+        echo "<br>a - b = " . ($a - $b);
     } else if ($a < 0 && $b < 0) {
-        echo "<br>a * b = " . $sum = $a * $b;
+        echo "<br>a * b = " . ($a * $b);
     } else {
-        echo "<br>a + b = " . $sum = $a + $b;
+        echo "<br>a + b = " . ($a + $b);
     }
     // 2. Присвоить переменной $а значение в промежутке [0..15].
     // С помощью оператора switch организовать вывод чисел от $a до 15.
@@ -99,21 +99,21 @@ ini_set('display_startup_errors', '1');
 
     function sum($a, $b)
     {
-        return $sum = $a + $b;
+        return $a + $b;
     }
 
     function sub($a, $b)
     {
-        return $sum = $a - $b;
+        return $a - $b;
     }
 
     function mult($a, $b)
     {
-        return $sum = $a * $b;
+        return $a * $b;
     }
     function div($a, $b)
     {
-        return $sum = $a / $b;
+        return $a / $b;
     }
 
     // echo "<br>sum = " . sub($a, $b); // проверяем результат
@@ -242,7 +242,6 @@ ini_set('display_startup_errors', '1');
     // 5. Написать функцию, которая заменяет в строке пробелы на подчеркивания и возвращает видоизмененную строчку.
 
     echo "<br>" . str_replace(" ", "_", sef_url($some_text));
-
 
     ?>
 
