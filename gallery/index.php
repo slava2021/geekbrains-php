@@ -22,8 +22,12 @@ include("../engine/engine.php");
 
 <body>
     <div class="gallery-body">
-        <?php uploadImage($dir, $name); ?>
-        <?php imagesSet($dir); ?>
+        <?php
+        // insertImageQuery($connect, $sql, $name, $dir, $size);
+        // uploadImage($dir, $name);x
+        (isset($_FILES["userimage"]["tmp_name"])) ? uploadImage($dir, $name, $connect, $sql) : "";
+        imagesSet($dir, $connect, $sql);
+        ?>
         <form enctype="multipart/form-data" method="post" action="" class="form-load-file">
             <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
             <hr>
