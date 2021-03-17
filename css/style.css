@@ -33,3 +33,15 @@
     width: 100%;
     min-height: 200px;
 }
+h2{
+    color:rebeccapurple;
+    text-align: center;
+}
+.top-menu{
+    display: flex;
+    list-style-type: none;
+}
+
+.top-menu li{
+    margin: 0 0 0 30px;
+}
