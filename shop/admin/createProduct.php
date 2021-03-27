@@ -1,15 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+ob_start();
+$host  = $_SERVER['HTTP_HOST'];
+$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+$extra = 'admin.php?dir=admin';
+sleep(1);
+header("Location: http://$host$uri/$extra");
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+//Соединяемся с БД
+include("../../engine/dbconnect.php");
 
-<body>
+//Подключаем файл с функциями
+include("../../engine/engine.php");
 
-</body>
+(isset($_GET["dir"])) ? $path = "../" : $path = "";
 
-</html>
+//Проверяем данные в масиве POST, если данные есть, то удаляем лишнее в $_POST
+if (isset($_POST['submit'])) {
+    $product_name = strip_tags($_POST["product-name"]);
+    $price = strip_tags($_POST["price"]);
+    // echo $product_name . $price;
+} else {
+    unset($_POST);
+}
+
+(isset($_FILES["userimage"]["tmp_name"])) ? uploadImage($dir, $name, $connect, $sql, $product_name, $price) : "";
