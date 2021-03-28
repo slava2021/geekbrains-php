@@ -18,7 +18,6 @@ include("../../engine/engine.php");
 if (isset($_POST['submit'])) {
     $product_name = strip_tags($_POST["product-name"]);
     $price = strip_tags($_POST["price"]);
-    // echo $product_name . $price;
 } else {
     unset($_POST);
 }

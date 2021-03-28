@@ -4,17 +4,25 @@ include("../../engine/dbconnect.php");
 
 //Подключаем файл с функциями
 include("../../engine/engine.php");
-//<a href=\"createProduct.php?edit=true&id={$row['id']}&
-// price={$row['price']}&product={$row['product']}\">&#9998;</a>
 
-if (isset($_GET['edit'])) {
-    $id = (int)$_GET["id"];
-    $product_name = strip_tags(htmlspecialchars($_GET["product"]));
-    $price = (float)$_GET["price"];
-    $get_name = strip_tags(htmlspecialchars($_GET["name"]));
-    $link = strip_tags(htmlspecialchars($_GET["link"]));
-    // echo $product_name . $price;
+if (!empty($_POST['Update'])) {
+    ob_start();
+    $host  = $_SERVER['HTTP_HOST'];
+    $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+    $extra = 'admin.php?dir=admin';
+    sleep(1);
+    header("Location: http://$host$uri/$extra");
 }
+
+$id = (int)$_GET["id"];
+
+(dbQueryId($connect, $id));
+
+$dir_img = $link . $get_name;
+$dir = $link;
+
+updateRecordDB($connect, $id, $link, $dir, $name, $get_name, $size);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,18 +38,12 @@ if (isset($_GET['edit'])) {
 <body>
     <div class="main">
         <?php
-        updateRecordDB($connect, $id, $link, $dir, $name, $get_name);
-        // if (isset($_POST['Update'])) {
-        //     $host  = $_SERVER['HTTP_HOST'];
-        //     $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-        //     $extra = 'editProduct.php';
-        //     header("Location: http://$host$uri/$extra");
-        // }
+
         ?>
         <h1 class="header-h1">Редактирование продукта</h1>
         <a href="admin.php?dir=admin">Назад</a>
         <hr width="100%">
-        <img src="../<?php echo htmlspecialchars($link) ?>">
+        <img src="../<?php echo $dir_img; ?>">
         <hr width="100%">
         <form enctype="multipart/form-data" method="post" action="" class="form-load-file">
             <label>Имя товара</label>

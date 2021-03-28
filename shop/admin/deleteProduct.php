@@ -9,9 +9,9 @@ include("../../engine/dbconnect.php");
 
 if (isset($_GET['delete'])) {
     $id = (int)$_GET["id"];
-    $get_name = strip_tags(htmlspecialchars($_GET["name"]));
-    $link = strip_tags(htmlspecialchars($_GET["link"]));
-    // echo "<br>{$link}";
+
+    dbQueryId($connect, $id);
+
     $sql = "DELETE FROM images WHERE id = '$id'";
 
     if (mysqli_query($connect, $sql)) {
@@ -21,9 +21,6 @@ if (isset($_GET['delete'])) {
         echo "Ошибка удаления: " . mysqli_error($connect);
     }
 }
-
-
-
 function deleteImage($link, $get_name)
 {
     $dir = "../img";

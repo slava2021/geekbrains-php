@@ -34,7 +34,6 @@ if (isset($_POST['submit'])) {
         <a href="../index.php?dir=main">На главную</a>
         <hr width="100%">
         <?php
-        // (isset($_FILES["userimage"]["tmp_name"])) ? uploadImage($dir, $name, $connect, $sql, $product_name, $price) : "";
         outputImageQuery($connect, $sql, $path);
         ?>
         <hr width="100%">

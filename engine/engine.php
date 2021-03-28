@@ -26,33 +26,6 @@ function uploadImage($dir, $name, $connect, $sql, $product_name, $price)
     unset($_POST);
 }
 
-//функция чтения файлов из директории img и проверки на тип
-// function imagesSet($dir, $connect, $sql, $path, $product_name, $price)
-// {
-//     if ($_GET['dir'] == 'admin') {
-//         $dir = '../' . $dir;
-//     } else {
-//         $dir;
-//     }
-//     $images = scandir($dir);
-//     // var_dump($images);
-//     foreach ($images as $value) {
-//         if ($value == "." || $value == "..") {
-//             continue;
-//         }
-//         $src = $dir . $value;
-//         $size = filesize($src);
-//         $size = round($size / 1024, 2);
-//         if (strpos($value, 'jpg') !== false) { //выполняем проверку mimetype я смтрел, другие функции например explode, filetype
-//             // echo "<a target=\"_blank\" href=\"" . $src . "\"><img class=\"thumb\" src=\"" . $src . "\"></a>";
-//             insertImageQuery($connect, $sql, $value, $dir, $size, $product_name, $price);
-//         } else {
-//             $warning = "error \"" . $value . "\" это не картинка";
-//         }
-//     }
-
-// }
-
 //Добавляем картинки в БД
 function insertImageQuery($connect, $sql, $name, $dir, $size, $product_name, $price)
 {
@@ -78,16 +51,16 @@ function outputImageQuery($connect, $sql, $path)
     }
     ($path == true) ? $path = "../" : $path = "";
     while ($row = mysqli_fetch_assoc($sql)) {
-        // echo "{$row['id']} | {$row['source']}{$row['name']} | {$row['size']} | {$row['created']} ";
         $link = $row['source'] . $row['iname'];
         $img = "<img class=\"thumb\" src=\"{$path}{$link}\"><br>";
-        $href = $path . "gallery.php?id={$row['id']}&link={$link}&size={$row['size']}&date={$row['created']}";
+        $href = $path . "gallery.php?id={$row['id']}";
         $html_a = "<a href=\"{$href}\" target=\"_blank\">{$img}</a>";
         $html_a .= "<hr>{$row['product']}<br>Price: <span class=\"price\">{$row['price']}</span>";
         if (isset($_GET['dir'])) {
             if ($_GET['dir'] == "admin") {
-                $edit = "<a href=\"editProduct.php?edit=true&id={$row['id']}&price={$row['price']}&product={$row['product']}&name={$row['iname']}&link={$link}\">&#9998;</a>";
-                $delite = "<a href=\"deleteProduct.php?delete=true&id={$row['id']}&link={$link}&name={$row['iname']}\">&#10006;</a>";
+                // $edit = "<a href=\"editProduct.php?edit=true&id={$row['id']}&price={$row['price']}&product={$row['product']}&name={$row['iname']}&link={$link}\">&#9998;</a>";
+                $edit = "<a href=\"editProduct.php?edit=true&id={$row['id']}\">&#9998;</a>";
+                $delite = "<a href=\"deleteProduct.php?delete=true&id={$row['id']}\">&#10006;</a>";
                 $html_a .= "<hr>{$edit} | {$delite}";
             }
         }
@@ -96,7 +69,7 @@ function outputImageQuery($connect, $sql, $path)
 }
 
 // Обновляем запись в БД
-function updateRecordDB($connect, $id, $link, $dir, $name, $get_name)
+function updateRecordDB($connect, $id, $link, $dir, $name, $get_name, $size)
 {
     if (!isset($_POST['product-name']) || !isset($_POST['price']) || !isset($name)) {
         // echo "Ошибка! Поля в форме не должны быть пустыми";
@@ -115,6 +88,8 @@ function updateRecordDB($connect, $id, $link, $dir, $name, $get_name)
                 continue;
             }
             if ($value == $get_name) {
+                $link = $link . $get_name;
+                echo "<br> del " . $link;
                 unlink($link);
             }
         }
@@ -125,6 +100,9 @@ function updateRecordDB($connect, $id, $link, $dir, $name, $get_name)
     }
     $product_name = strip_tags(htmlspecialchars($_POST['product-name']));
     $price = (float)$_POST['price'];
+    if (empty($name)) {
+        $name = $get_name;
+    }
     $sql = "UPDATE images SET product='$product_name', price='$price', iname = '$name', size = '$size' WHERE id=$id";
     // echo "<br>" . $sql;
     if (isset($_POST['Update'])) {

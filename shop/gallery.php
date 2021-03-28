@@ -1,10 +1,9 @@
 <?php
 //Принимаем данные методом GET, можно кстати сделать ассоциативный массив.
-$link = $_GET['link'];
+include("../engine/dbconnect.php");
 $id = $_GET['id'];
-$size = $_GET['size'];
-$date = $_GET['date'];
-
+(dbQueryId($connect, $id));
+$link = $link . $name;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,8 +18,8 @@ $date = $_GET['date'];
 <body>
     <?php
     $source = "<img src=\"{$link}\"><br>";
-    $source .= "<i>Id: {$id}, <br>";
-    $source .= "Size: {$size}Kb,<br> Uploaded: {$date}</i>";
+    $source .= "<i>Product name: {$product_name} <br>";
+    $source .= "<i>Price: {$price}";
     echo $source;
     ?>
 </body>

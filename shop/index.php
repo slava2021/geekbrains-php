@@ -22,10 +22,6 @@ include("../engine/engine.php");
         <a href="admin/admin.php?dir=admin">Административная панель</a>
         <hr width="100%">
         <?php
-        // insertImageQuery($connect, $sql, $name, $dir, $size);
-        // uploadImage($dir, $name);x
-        // (isset($_FILES["userimage"]["tmp_name"])) ? uploadImage($dir, $name, $connect, $sql) : "";
-        // imagesSet($dir, $connect, $sql, $path, $product_name, $price);
         outputImageQuery($connect, $sql, $path);
         ?>
     </div>
