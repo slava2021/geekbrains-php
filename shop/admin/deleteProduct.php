@@ -1,7 +1,16 @@
 <?php
+session_start();
+//Выполняем проверку пользователя, если не админ, перенаправляем на главную страницу
+if (isset($_SESSION['role']) || !isset($_SESSION['role'])) {
+    if ($_SESSION['role'] == 'customer' || !isset($_SESSION['role'])) {
+        header("Location: http://" . $_SERVER['HTTP_HOST'] . "/shop");
+        exit;
+    }
+}
+
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-$extra = 'admin.php?dir=admin';
+$extra = '../index.php?page=admin';
 sleep(1);
 header("Location: http://$host$uri/$extra");
 //Соединяемся с БД

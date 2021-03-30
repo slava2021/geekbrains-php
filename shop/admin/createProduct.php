@@ -1,8 +1,17 @@
 <?php
+session_start();
+//Выполняем проверку пользователя, если не админ, перенаправляем на главную страницу
+if (isset($_SESSION['role']) || !isset($_SESSION['role'])) {
+    if ($_SESSION['role'] == 'customer' || !isset($_SESSION['role'])) {
+        header("Location: http://" . $_SERVER['HTTP_HOST'] . "/shop");
+        exit;
+    }
+}
+
 ob_start();
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-$extra = 'admin.php?dir=admin';
+$extra = '../index.php?page=admin';
 sleep(1);
 header("Location: http://$host$uri/$extra");
 
@@ -12,7 +21,7 @@ include("../../engine/dbconnect.php");
 //Подключаем файл с функциями
 include("../../engine/engine.php");
 
-(isset($_GET["dir"])) ? $path = "../" : $path = "";
+(isset($_GET["page"])) ? $path = "../" : $path = "";
 
 //Проверяем данные в масиве POST, если данные есть, то удаляем лишнее в $_POST
 if (isset($_POST['submit'])) {

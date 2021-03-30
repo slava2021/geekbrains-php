@@ -22,11 +22,13 @@ function dbQueryId($connect, $id)
         global $name;
         global $size;
         global $get_name;
+        global $id_db;
         $price = $row['price'];
         $product_name = $row['product'];
         $link = $row['source'];
         $name = $row['iname'];
         $size = $row['size'];
         $get_name = $row['iname'];
+        $id_db = $row['id'];
     }
 }

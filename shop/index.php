@@ -1,9 +1,36 @@
 <?php
+session_start();
+
 //Соединяемся с БД
-include("../engine/dbconnect.php");
+require_once("../engine/dbconnect.php");
 
 //Подключаем файл с функциями
-include("../engine/engine.php");
+require_once("../engine/engine.php");
+
+//Функция аутентификации и авторизации
+authUser($connect);
+
+if (isset($_GET['page'])) {
+    $pages = array(
+        "products",
+        "gallery",
+        "cart",
+        "login",
+        "addUser",
+        "admin",
+    );
+    if (in_array($_GET['page'], $pages)) {
+        $_page = $_GET['page'];
+    } else {
+        $_page = "products"; //если в массиве нет такого имя страниц, устанавливаем по умполчанию страницу products
+    }
+} else {
+    $_page = "products"; //если GET пустой устанавливаем поумолчанию страницу products
+}
+
+if (isset($_GET['page']) == 'gallery') {
+    redirectPage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,18 +39,18 @@ include("../engine/engine.php");
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Shop</title>
+    <title>Online Shop - <?php echo $_page ?></title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <div class="main">
-        <h1 class="header-h1">Shop Online</h1>
-        <a href="admin/admin.php?dir=admin">Административная панель</a>
-        <hr width="100%">
+    <div class="container">
         <?php
-        outputImageQuery($connect, $sql, $path);
-        ?>
+        if ($_page == 'admin') {
+            $_page = 'admin/admin';
+        }
+        // echo $_page . $_GET['page'];
+        require($_page . ".php"); ?>
     </div>
 </body>
 
