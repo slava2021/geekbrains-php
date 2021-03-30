@@ -21,6 +21,7 @@ if (isset($_POST['submit'])) {
     <form method="post" action="?page=cart">
         <table class="table">
             <tr>
+                <th>Image</th>
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Price</th>
@@ -43,6 +44,7 @@ if (isset($_POST['submit'])) {
                     $totalprice += $subtotal;
             ?>
             <tr>
+                <td><img height="60px" src="<?php echo $_SESSION['cart'][$row['id']]['source'] ?>"></td>
                 <td><?php echo $row['product'] ?></td>
                 <td><input type="text" name="quantity[<?php echo $row['id'] ?>]" size="5"
                         value="<?php echo $_SESSION['cart'][$row['id']]['quantity'] ?>" /></td>
@@ -53,13 +55,13 @@ if (isset($_POST['submit'])) {
                 }
                 ?>
             <tr>
-                <td colspan="4">Total Price: <?php echo $totalprice ?></td>
+                <td colspan="5">Total Price: <?php echo $totalprice ?></td>
             </tr>
         </table>
         <button type="submit" name="submit">Update Cart</button>
+        <p>To remove an item, set it's quantity to 0. </p>
     </form>
-    <br />
-    <p>To remove an item, set it's quantity to 0. </p>
+
 </div>
 <?php
             } else {

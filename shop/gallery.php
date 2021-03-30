@@ -22,7 +22,8 @@ if ($id == $id_db) {
 
                 $_SESSION['cart'][$row_s['id']] = array(
                     "quantity" => 1,
-                    "price" => $row_s['price']
+                    "price" => $row_s['price'],
+                    "source" => $link
                 );
             } else {
                 $message = "This product id it's invalid!";
@@ -32,7 +33,8 @@ if ($id == $id_db) {
 ?>
 <div class="main">
     <h1 class="header-h1">Product description</h1>
-    <?php if ($_SESSION['role'] == 'customer' || !isset($_SESSION['role'])) { ?>
+    <?php
+        if (!isset($_SESSION['role']) || $_SESSION['role'] == 'customer') { ?>
     <a href="?page=products">Go back to products page</a>
     <?php } else if ($_SESSION['role'] == 'admin') { ?>
     <a href="?page=admin">Go back to admin page</a>
@@ -50,7 +52,7 @@ if ($id == $id_db) {
         echo "<h2>$message</h2>";
     }
 } else {
-    echo 'Такого продукта нет в каталоге';
+    echo 'Product is out of catalog';
 }
     ?>
 </div>
