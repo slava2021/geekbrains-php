@@ -45,6 +45,11 @@
     text-align: center;
     color: orangered;
 }
+.message-error{
+    width: 100%;
+    text-align: center;
+    color: red;
+}
 .message-succ{
     width: 100%;
     text-align: center;

@@ -59,6 +59,7 @@ if (isset($_POST['submit'])) {
             </tr>
         </table>
         <button type="submit" name="submit">Update Cart</button>
+        <button type="submit" name="order" value="order">Create order</button>
         <p>To remove an item, set it's quantity to 0. </p>
     </form>
 

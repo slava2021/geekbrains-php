@@ -18,6 +18,9 @@ if (isset($_GET['page'])) {
         "login",
         "addUser",
         "admin",
+        "order",
+        "order-list",
+        "order-details",
     );
     if (in_array($_GET['page'], $pages)) {
         $_page = $_GET['page'];
@@ -48,6 +51,12 @@ if (isset($_GET['page']) == 'gallery') {
         <?php
         if ($_page == 'admin') {
             $_page = 'admin/admin';
+        }
+        if ($_page == 'order-list') {
+            $_page = 'admin/order-list';
+        }
+        if ($_page == 'order-details') {
+            $_page = 'admin/order-details';
         }
         // echo $_page . $_GET['page'];
         require($_page . ".php"); ?>

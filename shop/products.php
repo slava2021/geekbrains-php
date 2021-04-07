@@ -26,6 +26,7 @@
         foreach ($_SESSION['cart'] as $id => $value) {
             $sql .= $id . ",";
         }
+        // echo $sql;
         $sql = substr($sql, 0, -1) . ") ORDER BY product ASC";
         $query = mysqli_query($connect, $sql);
         // var_dump($query);

@@ -126,6 +126,10 @@ function redirectPage()
         sleep(1);
         header("Location: http://$host$uri/$extra");
     }
+    if (isset($_POST['order']) && $_POST['order'] == 'order') {
+        header("Location: http://" . $_SERVER['HTTP_HOST'] . "/" . rtrim(dirname($_SERVER['PHP_SELF'])) . "?page=order");
+        exit;
+    }
 }
 
 function authUser($connect)
@@ -146,7 +150,7 @@ function authUser($connect)
                 $_SESSION['role'] = $role;
                 $_SESSION['succ'] = "ok";
             } else {
-                echo "<br>Incorrect password or login";
+                echo "<h1 class=\"message-error\">Incorrect password or login</h1>";
             }
             unset($_POST['submit']);
         }
@@ -186,4 +190,150 @@ function authUser($connect)
             exit;
         }
     }
+}
+
+function cartAdd()
+{
+}
+//Добавляем заказ в БД
+function addOrder($connect)
+{
+    if (isset($_POST['submit'])) {
+        $user_name = strip_tags(htmlspecialchars($_POST['user_name']));
+        $phone = strip_tags(htmlspecialchars($_POST['phone']));
+        $address = strip_tags(htmlspecialchars($_POST['address']));
+        $order_status = strip_tags(htmlspecialchars($_POST['order_status']));
+        if ($order_status == "created") {
+            $order_status = '1';
+        }
+        $sql = "INSERT INTO `order` (user_name, phone, address, status_id) VALUES ('$user_name', '$phone', '$address', '$order_status')";
+        mysqli_query($connect, $sql);
+        // echo mysqli_errno($connect) . ": " . mysqli_error($connect) . "\n";
+
+        $sql = "SELECT id FROM `order` ORDER BY id DESC LIMIT 1";
+        $result = mysqli_query($connect, $sql);
+        foreach ($result as $value) {
+            $order_id = $value['id'];
+        }
+        $sql = "INSERT INTO order_item (order_id, product_id, price, quantity) VALUE ";
+        foreach ($_SESSION['cart'] as $prod_id => $value) {
+            // $sql .= $id . ",";
+            // echo "<br>Product id = " . $prod_id;
+            $quantity = $_SESSION['cart'][$prod_id]['quantity'];
+            $price = $_SESSION['cart'][$prod_id]['price'];
+            $sql .= "('$order_id', '$prod_id', '$price', '$quantity'), ";
+        }
+        $sql = substr($sql, 0, -2);
+        // echo $sql . "<br>";
+        mysqli_query($connect, $sql);
+        // echo mysqli_errno($connect) . ": " . mysqli_error($connect) . "\n";
+    }
+}
+
+function listOrder($connect)
+{
+    $sql = "SELECT 
+        `order`.`id`,
+        `order`.`user_name`,
+        `order`.`created`,
+        `status`.`status`
+         FROM `order`
+        INNER JOIN `status` ON `order`.`status_id` = `status`.`id`;";
+    $result = mysqli_query($connect, $sql);
+    $order_list = "<table class=\"table\">
+    <tr><th>Order id</th><th>User name</th><th>Created date</th><th>Order status</th><th></th></tr>
+   ";
+    foreach ($result as $value) {
+        $order_list .= "<tr><td>{$value['id']}</td>";
+        $order_list .= "<td>{$value['user_name']}</td>";
+        $order_list .= "<td>{$value['created']}</td>";
+        $order_list .= "<td>{$value['status']}</td>";
+        $order_list .= "<td><a href=\"?page=order-details&order_id={$value['id']}\">Order details</a></td>";
+    }
+    $order_list .= "</table>";
+    echo $order_list;
+}
+
+function orderDetails($connect)
+{
+    if (isset($_GET['order_id'])) {
+        $order_id = $_GET['order_id'];
+    }
+    $sql = "
+    SELECT
+    `order`.`id`,
+     `order`.`user_name`,
+     `order`.`phone`,
+     `order`.`address`,
+     `order_item`.`price`,
+     `order_item`.`quantity`,
+     `images`.`product`,
+     `order`.`created`,
+     `status`.`status`
+    FROM `order`
+    INNER JOIN `order_item` ON `order`.`id` = `order_item`.`order_id`
+    INNER JOIN `images` ON  `images`.`id` = `order_item`.`product_id` 
+    INNER JOIN `status` ON `status`.`id` = `order`.`status_id` WHERE `order`.`id` = {$order_id};
+";
+    $result = mysqli_query($connect, $sql);
+    // echo mysqli_errno($connect) . ": " . mysqli_error($connect) . "<br>\n";
+    foreach ($result as $value) {
+        $count = '0';
+        $status_name = $value['status'];
+        $select_option = selectOption($connect, $status_name, $order_id);
+        echo " Order No.: {$value['id']},
+            Name: {$value['user_name']},
+            Phone: {$value['phone']},
+            Address: {$value['address']}
+            <hr width=\"100%\">
+            Order status: {$select_option}
+            <hr width=\"100%\"> ";
+        $count++;
+        if ($count == '1') break;
+    }
+    $order_list = "<table class=\"table\">
+    <tr><th>Product</th><th>Quantity</th><th>Price</th><th></th></tr>
+   ";
+    // var_dump($result);
+    $total = 0;
+    foreach ($result as $value) {
+        $order_id = $value['id'];
+        $order_list .= "<tr><td>{$value['product']}</td>";
+        $order_list .= "<td>{$value['quantity']}</td>";
+        $order_list .= "<td>{$value['price']}</td>";
+        $item_sum = $value['price'] * $value['quantity'];
+        $order_list .= "<td>{$item_sum}</td>";
+        $total += $item_sum;
+    }
+    $order_list .= "<tr><td colspan=\"4\">Total price: {$total}</td></tr>";
+    $order_list .= "</table>";
+    echo $order_list;
+}
+
+function selectOption($connect, $status_name, $order_id)
+{
+    if (isset($_POST['submit'])) {
+        $status_id = $_POST['status'];
+        // echo $status_id;
+        $sql = "UPDATE `order` SET `status_id` = $status_id WHERE `order`.`id` = $order_id;";
+        // echo $sql;
+        mysqli_query($connect, $sql);
+        // echo mysqli_errno($connect) . ": " . mysqli_error($connect) . "<br>\n";
+        unset($_POST['submit']);
+    }
+    $sql = "SELECT * FROM `status`";
+    $result = mysqli_query($connect, $sql);
+    $select = "<form action=\"\" method=\"post\">\n
+    <select name=\"status\">";
+    foreach ($result as $value) {
+        if ($status_name == $value['status']) {
+            $select .= "<option value=\"{$value['id']}\" selected>{$value['status']}</option>\n";
+        } else {
+            $select .= "<option value=\"{$value['id']}\">{$value['status']}</option>\n";
+        }
+    }
+    $select .= "</select>\n
+     <input type=\"hidden\" name=\"order_id\" value=\"$order_id\">
+     <input type=\"submit\" name=\"submit\" vlaue=\"submit\">\n</form>";
+    return $select;
 }

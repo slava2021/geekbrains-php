@@ -22,6 +22,7 @@ if (isset($_POST['add'])) {
     <h1 class="header-h1">Admin panel</h1>
     <div class="menu">
         <a href="?page=products">Go back to main page</a>
+        <a href="?page=order-list">Order list</a>
         <?php echo "<div>User: " . $_SESSION['login'] . " -> <a href=\"?page=products&action=logout\">logout</a></div>"; ?>
     </div>
     <hr width="100%">
